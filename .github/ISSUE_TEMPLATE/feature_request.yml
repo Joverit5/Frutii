@@ -1,0 +1,39 @@
+name: Feature request
+description: Suggest something Frutii should do
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Frutii has a [roadmap](https://github.com/Joverit5/Frutii#roadmap) —
+        worth a look first, your idea may already be scheduled.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: The situation, not the solution. It usually leads somewhere better.
+    validations:
+      required: true
+
+  - type: textarea
+    id: idea
+    attributes:
+      label: What you have in mind
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Library and collections
+        - Artwork and metadata
+        - Emulation
+        - In-game overlay
+        - Achievements
+        - Album
+        - Social (friends, presence, netplay)
+        - Look and feel
+        - Something else

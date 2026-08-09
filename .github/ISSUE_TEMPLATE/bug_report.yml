@@ -1,0 +1,72 @@
+name: Bug report
+description: Something in Frutii is broken or behaves unexpectedly
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing Frutii. The two files below are what make a crash
+        actually fixable — please attach them if you have them.
+
+  - type: input
+    id: version
+    attributes:
+      label: Frutii version
+      description: Shown in the installer, or the release you downloaded.
+      placeholder: "0.3.5-alpha"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where
+      options:
+        - Library / scanning
+        - Artwork
+        - Built-in emulator (frutii_emu)
+        - In-game overlay
+        - RetroAchievements
+        - Album / screenshots
+        - External emulator launch
+        - Backup & restore
+        - Installer / updating
+        - Something else
+    validations:
+      required: true
+
+  - type: input
+    id: game
+    attributes:
+      label: Game and console (if it only happens with one)
+      placeholder: "Mario Kart Wii (Wii), Dolphin core"
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs and crash dump
+      description: |
+        All of these live in the install folder (`%LOCALAPPDATA%\Frutii` by
+        default), next to the executable:
+
+        - `frutii_host.log` — the launcher
+        - `frutii_emu.log` — the emulator (this one has the core's own output)
+        - `*-crash-*.dmp` — written automatically if something crashed; the log
+          line right before it gives the path
+
+        Drag the files into this box, or paste the last ~50 lines.
+      render: shell
+
+  - type: input
+    id: system
+    attributes:
+      label: Windows version and GPU
+      placeholder: "Windows 11 24H2, RTX 3060"
