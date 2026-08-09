@@ -7,10 +7,10 @@
 <h3 align="center">A social gaming platform for ROMs</h3>
 
 <p align="center">
-  <a href="https://github.com/Joverit5/Frutii/releases/latest"><img src="https://img.shields.io/github/v/release/Joverit5/Frutii?include_prereleases&label=latest&color=7c3aed" alt="Latest release"/></a>
-  <a href="https://github.com/Joverit5/Frutii/releases"><img src="https://img.shields.io/github/downloads/Joverit5/Frutii/total?color=10b981&label=downloads" alt="Downloads"/></a>
-  <img src="https://img.shields.io/badge/platform-Windows%2010%2B-blue" alt="Windows 10+"/>
-  <img src="https://img.shields.io/badge/status-alpha-f59e0b" alt="Alpha"/>
+  <a href="https://github.com/Joverit5/Frutii/releases"><img src="https://img.shields.io/badge/version-0.3.5--alpha-7c3aed?label=latest" alt="Latest Release"/></a>
+  <a href="https://github.com/Joverit5/Frutii"><img src="https://img.shields.io/badge/platform-Windows-blue" alt="Windows"/></a>
+  <a href="https://github.com/Joverit5/Frutii/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"/></a>
+  <a href="https://github.com/Joverit5/Frutii"><img src="https://img.shields.io/badge/built%20with-C%2B%2B%20%2B%20React-purple" alt="Built with C++ + React"/></a>
 </p>
 
 <p align="center">
@@ -93,6 +93,14 @@ Every slot of every game in one grid, each with the real capture from the moment
 
 ## Screenshots
 
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/a172a425-70e4-4064-8dcd-9b17e0c3b16b" />
+
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/33339964-b0b9-43b1-b0ef-55696d3ab79c" />
+
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/b861bed2-4fef-44b1-85b4-6955411bc86d" />
+
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/7ae5d4b5-68b4-4cda-9d1c-552db6dbe1a7" />
+
 <!--
   Paste screenshots here: drag the image into a GitHub issue comment or the
   release description, copy the generated user-attachments URL, and drop it in
@@ -102,8 +110,6 @@ Every slot of every game in one grid, each with the real capture from the moment
     3. The in-game overlay (ESC menu) over a real game
     4. Achievements page
 -->
-
-*Coming with the next release.*
 
 ---
 
