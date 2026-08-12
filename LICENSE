@@ -1,4 +1,4 @@
-Frutii â€” License
+Frutii — License
 
 Copyright (c) 2026 The Frutii Team. All rights reserved.
 
@@ -27,7 +27,7 @@ Copyright (c) 2026 The Frutii Team. All rights reserved.
 
 4. Third-party components
 
-   Frutii links against and vendors third-party software â€” among others SDL3,
+   Frutii links against and vendors third-party software — among others SDL3,
    WebView2, nanovg, rcheevos, stb, nlohmann/json, cpp-httplib, webview and
    glad, plus the npm dependencies of the web UI. Each of those components
    remains under its own license, which is included in its source tree or
