@@ -7,7 +7,7 @@
 <h3 align="center">A social gaming platform for ROMs</h3>
 
 <p align="center">
-  <a href="https://github.com/Joverit5/Frutii/releases"><img src="https://img.shields.io/badge/version-0.3.7--alpha-7c3aed?label=latest" alt="Latest Release"/></a>
+  <a href="https://github.com/Joverit5/Frutii/releases"><img src="https://img.shields.io/badge/version-0.3.8--alpha-7c3aed?label=latest" alt="Latest Release"/></a>
   <a href="https://github.com/Joverit5/Frutii"><img src="https://img.shields.io/badge/platform-Windows-blue" alt="Windows"/></a>
   <a href="https://github.com/Joverit5/Frutii/blob/main/LICENSE"><a href="LICENSE"><img src="https://img.shields.io/badge/license-proprietary-lightgrey" alt="Proprietary license"/></a></a>
   <a href="https://github.com/Joverit5/Frutii"><img src="https://img.shields.io/badge/built%20with-C%2B%2B%20%2B%20React-purple" alt="Built with C++ + React"/></a>
