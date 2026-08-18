@@ -135,6 +135,11 @@ jobs:
           GH_TOKEN: ${{ secrets.MONITOR_PAT }}
           VERSION: ${{ steps.probe.outputs.version }}
         run: |
+          # La version va PRIMERO: es la unica linea util del log cuando todo
+          # esta bien, y saliendo antes por falta de PAT no se imprimia nunca.
+          # Ademas delata un despliegue revertido sin tener que ir a mirar.
+          echo "ok, version $VERSION"
+
           [ -z "$GH_TOKEN" ] && { echo "sin MONITOR_PAT, no se cierra nada"; exit 0; }
 
           num=$(gh issue list -R "$PRIVATE_REPO" --state open --limit 20 \
@@ -147,7 +152,6 @@ jobs:
             echo "cerrada #$num"
           fi
 
-          echo "ok, version $VERSION"
 
   # I4 - cuota de correo. Aparte del sondeo y con su propio horario: quedarse sin
   # cuota no rompe nada visible, solo deja de llegar el correo de reseteo de
