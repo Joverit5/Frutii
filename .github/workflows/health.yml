@@ -1,0 +1,208 @@
+# Vigilante del servicio de identidad (I3).
+#
+# ## Por que vive AQUI, en el repo publico
+#
+# Dos razones, y ninguna es preferencia.
+#
+# 1. **Tiene que estar fuera de la maquina vigilada.** Un vigilante dentro de la
+#    instancia se muere con ella, y eso es peor que no tener ninguno: deja la
+#    sensacion de que hay vigilancia justo el dia que no la hay.
+#
+# 2. **Los minutos de Actions en un repo PRIVADO se cobran.** Una comprobacion
+#    cada diez minutos son ~4.300 ejecuciones al mes; el plan gratuito da 2.000
+#    minutos. En un repo publico los minutos son ilimitados, asi que el
+#    vigilante puede latir de verdad en vez de cada hora para que quepa.
+#
+# ## Pero el aviso NO es publico
+#
+# Que la API este caida no tiene por que enterarse todo el mundo antes que su
+# dueno. El fallo abre una incidencia en el repo PRIVADO usando `MONITOR_PAT`.
+# Aqui solo vive el reloj.
+#
+# ## Secretos que necesita
+#
+#   MONITOR_PAT     PAT con 'Issues: write' sobre Joverit5/Frutii-dev. Sin el,
+#                   el workflow falla en voz alta en vez de callarse.
+#   BREVO_API_KEY   Opcional (I4). Sin el, ese paso se salta y lo dice.
+
+name: health
+
+on:
+  schedule:
+    # Cada diez minutos. El cron de GitHub es "cuando pueda", no exacto: puede
+    # retrasarse varios minutos si la cola esta cargada. Para "se ha caido esto"
+    # sirve; para un SLA no serviria, y no hay ninguno.
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+# Dos comprobaciones solapadas no aportan nada y pueden abrir dos incidencias
+# para la misma caida.
+concurrency:
+  group: health
+  cancel-in-progress: false
+
+env:
+  HEALTH_URL: https://frutii.duckdns.org/health
+  PRIVATE_REPO: Joverit5/Frutii-dev
+  # El marcador va en el TITULO y no en una etiqueta: una etiqueta hay que
+  # crearla a mano en el repo destino, y si no existe `gh` falla al crear la
+  # incidencia — o sea que el aviso se pierde justo cuando hace falta.
+  ISSUE_TITLE: "[health] la API de Frutii no responde"
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comprobar /health
+        id: probe
+        run: |
+          # Tres intentos separados. Un unico fallo no es una caida: un
+          # `systemctl restart` durante un despliegue tarda un par de segundos, y
+          # avisar de eso ensena a ignorar los avisos.
+          ok=0
+          for i in 1 2 3; do
+            body=$(curl -fsS -m 15 "$HEALTH_URL" 2>/dev/null || true)
+            if [ -n "$body" ] && [ "$(printf '%s' "$body" | jq -r '.ok // false')" = "true" ]; then
+              ok=1
+              echo "version=$(printf '%s' "$body" | jq -r '.version // "?"')" >> "$GITHUB_OUTPUT"
+              break
+            fi
+            echo "intento $i sin respuesta valida"
+            [ "$i" -lt 3 ] && sleep 20
+          done
+
+          echo "ok=$ok" >> "$GITHUB_OUTPUT"
+          # `detail` es lo ultimo que se vio. Vacio = ni siquiera hubo cuerpo,
+          # que distingue "el proceso contesta mal" de "no contesta nadie".
+          {
+            echo "detail<<EOF"
+            printf '%s\n' "${body:-(sin respuesta)}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Abrir o actualizar la incidencia
+        if: steps.probe.outputs.ok != '1'
+        env:
+          GH_TOKEN: ${{ secrets.MONITOR_PAT }}
+          DETAIL: ${{ steps.probe.outputs.detail }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::falta MONITOR_PAT: la API esta caida y no hay como avisar"
+            exit 1
+          fi
+
+          # Se reutiliza la incidencia abierta si la hay. Una por caida, no una
+          # cada diez minutos: un aviso que se repite solo se acaba silenciando,
+          # y entonces el vigilante deja de existir aunque siga corriendo.
+          num=$(gh issue list -R "$PRIVATE_REPO" --state open --limit 20 \
+                  --json number,title \
+                  --jq "map(select(.title == \"$ISSUE_TITLE\")) | .[0].number // empty")
+
+          cuerpo=$(printf '%s\n' \
+            "\`$HEALTH_URL\` no respondio \`ok:true\` en tres intentos." \
+            "" \
+            "Ultima respuesta:" \
+            "" \
+            '```' \
+            "$DETAIL" \
+            '```' \
+            "" \
+            "Comprobado: $(date -u '+%Y-%m-%d %H:%M UTC')" \
+            "" \
+            "Que mirar en la instancia:" \
+            "" \
+            '```bash' \
+            "sudo systemctl status frutii-api" \
+            "sudo journalctl -u frutii-api -n 40 --no-pager" \
+            '```')
+
+          if [ -n "$num" ]; then
+            gh issue comment "$num" -R "$PRIVATE_REPO" --body "$cuerpo"
+            echo "comentado en #$num"
+          else
+            gh issue create -R "$PRIVATE_REPO" --title "$ISSUE_TITLE" --body "$cuerpo"
+          fi
+
+          # El workflow falla a proposito: asi la caida se ve tambien en la
+          # pestana de Actions y en el correo que GitHub manda por un workflow
+          # roto, sin depender de que alguien mire las incidencias.
+          echo "::error::la API no responde"
+          exit 1
+
+      - name: Cerrar la incidencia si volvio
+        if: steps.probe.outputs.ok == '1'
+        env:
+          GH_TOKEN: ${{ secrets.MONITOR_PAT }}
+          VERSION: ${{ steps.probe.outputs.version }}
+        run: |
+          [ -z "$GH_TOKEN" ] && { echo "sin MONITOR_PAT, no se cierra nada"; exit 0; }
+
+          num=$(gh issue list -R "$PRIVATE_REPO" --state open --limit 20 \
+                  --json number,title \
+                  --jq "map(select(.title == \"$ISSUE_TITLE\")) | .[0].number // empty")
+
+          if [ -n "$num" ]; then
+            gh issue close "$num" -R "$PRIVATE_REPO" \
+              --comment "Vuelve a responder. Version: \`$VERSION\` ($(date -u '+%Y-%m-%d %H:%M UTC'))."
+            echo "cerrada #$num"
+          fi
+
+          echo "ok, version $VERSION"
+
+  # I4 - cuota de correo. Aparte del sondeo y con su propio horario: quedarse sin
+  # cuota no rompe nada visible, solo deja de llegar el correo de reseteo de
+  # contrasena. O sea que se descubre el peor dia y en la peor persona.
+  brevo:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '*/10 * * * *'
+    steps:
+      - name: Correos enviados hoy
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          GH_TOKEN: ${{ secrets.MONITOR_PAT }}
+        run: |
+          if [ -z "$BREVO_API_KEY" ]; then
+            echo "sin BREVO_API_KEY: I4 no esta configurado todavia"
+            exit 0
+          fi
+
+          # Solo una vez al dia, sobre las 20:00 UTC: a esa hora ya se sabe como
+          # ha ido el dia y todavia da tiempo a hacer algo. Comprobarlo cada diez
+          # minutos gastaria cuota de API para mirar cuota de correo.
+          hora=$(date -u '+%H%M')
+          if [ "${{ github.event_name }}" != "workflow_dispatch" ] && [ "${hora:0:2}" != "20" ]; then
+            exit 0
+          fi
+
+          enviados=$(curl -fsS -m 20 \
+            -H "api-key: $BREVO_API_KEY" \
+            -H "accept: application/json" \
+            "https://api.brevo.com/v3/smtp/statistics/aggregatedReport?days=1" \
+            | jq -r '.requests // 0')
+
+          echo "correos enviados en 24 h: $enviados (limite del plan gratuito: 300)"
+
+          # 240 de 300. El aviso llega con margen para reaccionar, no cuando ya
+          # no queda ninguno.
+          if [ "$enviados" -ge 240 ]; then
+            echo "::warning::quedan pocos correos de la cuota diaria de Brevo ($enviados/300)"
+
+            # El cuerpo se arma con printf y no como cadena multilinea: dentro de
+            # un bloque `run: |` una linea que empiece en la columna 0 SALE del
+            # bloque, y el fichero deja de ser YAML valido. No da un error de
+            # bash, da un error de sintaxis del workflow — o sea que el aviso no
+            # existe y encima se descubre tarde.
+            cuerpo=$(printf '%s\n' \
+              "Enviados en 24 h: **$enviados** de 300." \
+              "" \
+              "Sin cuota no se rompe nada visible: simplemente deja de llegar el" \
+              "correo de reseteo de contrasena, que es el que se usa el peor dia." \
+              "" \
+              "Si esto se repite, toca plan de pago o un segundo proveedor.")
+
+            if [ -n "$GH_TOKEN" ]; then
+              gh issue create -R "$PRIVATE_REPO" \
+                --title "[brevo] la cuota diaria de correo se esta agotando" \
+                --body "$cuerpo"
+            fi
+          fi
