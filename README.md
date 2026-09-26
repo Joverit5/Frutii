@@ -7,10 +7,11 @@
 <h3 align="center">A social gaming platform for ROMs</h3>
 
 <p align="center">
-  <a href="https://github.com/Joverit5/Frutii/releases"><img src="https://img.shields.io/badge/version-0.3.9--alpha-7c3aed?label=latest" alt="Latest Release"/></a>
-  <a href="https://github.com/Joverit5/Frutii"><img src="https://img.shields.io/badge/platform-Windows-blue" alt="Windows"/></a>
-  <a href="https://github.com/Joverit5/Frutii/blob/main/LICENSE"><a href="LICENSE"><img src="https://img.shields.io/badge/license-proprietary-lightgrey" alt="Proprietary license"/></a></a>
-  <a href="https://github.com/Joverit5/Frutii"><img src="https://img.shields.io/badge/built%20with-C%2B%2B%20%2B%20React-purple" alt="Built with C++ + React"/></a>
+  <a href="https://github.com/Joverit5/Frutii/releases/latest"><img src="https://img.shields.io/github/v/release/Joverit5/Frutii?include_prereleases&label=latest&color=7c3aed" alt="Latest release"/></a>
+  <a href="https://github.com/Joverit5/Frutii/releases"><img src="https://img.shields.io/github/downloads/Joverit5/Frutii/total?color=10b981&label=downloads" alt="Downloads"/></a>
+  <img src="https://img.shields.io/badge/platform-Windows%2010%2B-blue" alt="Windows 10+"/>
+  <img src="https://img.shields.io/badge/status-alpha-f59e0b" alt="Alpha"/>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-proprietary-lightgrey" alt="Proprietary license"/></a>
 </p>
 
 <p align="center">
@@ -75,9 +76,11 @@ Frutii ships **its own libretro frontend** as a separate process, so a core cras
 
 - Cores download **on demand** the first time you launch a game on a console you haven't played yet — scanning never downloads anything
 - Curated default core per console, with alternatives you can switch to
-- 4 controllers with hot-plug, per-console button mapping shared with external emulators, touch/stylus support for DS
+- 4 controllers with hot-plug, per-console button mapping, touch/stylus support for DS
 - SRAM plus 10 save state slots, screenshots, integer scaling and letterboxing
 - CRT and scanline shaders, rewind, fast-forward and slow motion
+- Multi-disc games as a single entry, with disc swapping from the in-game overlay
+- Per-game cheats (disabled under RetroAchievements hardcore)
 - A **System Files** manager that tells you which BIOS each console needs and validates what you import by checksum
 
 ### An in-game overlay
@@ -89,9 +92,35 @@ Connect your RetroAchievements account and achievements unlock **while you play*
 ### Save states you can find again
 Every slot of every game in one grid, each with the real capture from the moment you saved, timestamped. Pick one and the game boots straight into it.
 
+### An album for every capture
+Every screenshot and every save-state moment in one system album, filtered by game, favorites, trophy shots or moments. Open one at pixel-perfect size, run a slideshow, set it as game art or wallpaper, jump back into the moment it was taken, or send it to a friend.
+
+### Friends, and a room to hang out in
+With a free Frutii account your friends live in the top-left corner of every screen: who is online, who is playing what, and a reply box a click away. Chat one-to-one or in groups, share captures, and open anyone's profile card. Any chat opens a small 3D **room** where you walk around together, talk through the thread, see the photos you have shared on the walls, and put your game soundtracks on the radio. The account is optional: nothing on your PC depends on it.
+
 ---
 
 ## Screenshots
+
+<p align="center">
+  <img src="media/0.4.7/home.jpg" width="820" alt="The home screen, with your friends in the top-left corner"><br>
+  <em>Home. Your friends are always in the top-left corner.</em>
+</p>
+
+<p align="center">
+  <img src="media/0.4.7/room.jpg" width="820" alt="The group room opened from a chat"><br>
+  <em>The room you open from any chat. Everyone inside is an orb with their photo.</em>
+</p>
+
+<p align="center">
+  <img src="media/0.4.7/profile-card.jpg" width="820" alt="A profile card"><br>
+  <em>Your profile card: games, time played, favorite game and recent achievements.</em>
+</p>
+
+<p align="center">
+  <img src="media/0.4.7/album.jpg" width="820" alt="The system album viewer"><br>
+  <em>The album, opened at pixel-perfect size.</em>
+</p>
 
 <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/a172a425-70e4-4064-8dcd-9b17e0c3b16b" />
 
@@ -100,16 +129,6 @@ Every slot of every game in one grid, each with the real capture from the moment
 <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/b861bed2-4fef-44b1-85b4-6955411bc86d" />
 
 <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/7ae5d4b5-68b4-4cda-9d1c-552db6dbe1a7" />
-
-<!--
-  Paste screenshots here: drag the image into a GitHub issue comment or the
-  release description, copy the generated user-attachments URL, and drop it in
-  as <img src="..." width="820">. Suggested set:
-    1. Home screen with the console channels
-    2. A collection with artwork
-    3. The in-game overlay (ESC menu) over a real game
-    4. Achievements page
--->
 
 ---
 
@@ -143,9 +162,9 @@ Frutii is being built offline-first: everything that lives on your machine has t
 
 **Working today** — library and collections, artwork, the built-in emulator with cores, input profiles and BIOS management, the in-game overlay, RetroAchievements with in-game unlocks and hardcore mode, save state manager, shaders, rewind, fast-forward, backup and restore, per-user installer.
 
-**Next** — Vulkan rendering for the heavy 3D consoles, an overlay for external emulators, multi-disc support and cheats.
+**Next** — Vulkan rendering for the heavy 3D consoles.
 
-**After that** — the social layer, in this order: a Frutii account, profiles, friends and presence, notifications, a feed, chat, and finally netplay (delay-based first, rollback later). The account is deliberately **additive**: losing it never costs you your library, saves, states, screenshots or RetroAchievements progress.
+**The social layer** is here — a Frutii account, friends, presence, chat, profile cards, and a 3D **group room** you open from any chat and share live with whoever is inside. Where the room goes next: everyone's music on the radio instead of only yours, a TV to watch whoever is playing, proximity voice, and finally joining their game (delay-based netplay first, rollback later). The account is deliberately **additive**: losing it never costs you your library, saves, states, screenshots or RetroAchievements progress.
 
 ---
 
@@ -158,7 +177,7 @@ No. Frutii ships no ROMs, no ISOs and no BIOS files. You point it at content you
 No. Cores are downloaded from the official libretro buildbot the first time you need one, and you can manage or remove them in the Emulation panel.
 
 **Can I use my existing emulators instead?**
-Yes. Consoles that don't have a solid native path yet — GameCube, Wii, PS2, 3DS — can launch through your own standalone emulator, and Frutii writes the controller mapping as an override instead of touching your global config.
+Yes. Consoles that don't have a solid native path yet — GameCube, Wii, PS2, 3DS — can launch through your own standalone emulator. Frutii never rewrites another emulator's configuration: with RetroArch it passes your controller mapping as a per-launch override, and Dolphin, PCSX2 and PPSSPP are simply launched with their own settings as you left them.
 
 **Is the source code available?**
 Not currently. Frutii is developed in a private repository during alpha.
