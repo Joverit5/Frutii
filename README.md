@@ -98,11 +98,26 @@ Every screenshot and every save-state moment in one system album, filtered by ga
 ### Frutii Plaza, and a room to hang out in
 With a free Frutii account your friends live in the top-left corner of every screen, and **Frutii Plaza** is where you go to see them: short notes over their faces, communities for the games you share, friends-only posts, reactions to their achievements and captures, and every picture shared with you in one place. Chat one-to-one or in groups of up to twenty.
 
-Any chat opens a 3D **room** you share live with whoever is inside — up to ten people. It grows with your group, every group gets its own colors, you can sit down, talk with **proximity voice**, put a song on a radio the whole room hears, and see the photos and achievements of the people there. The account is optional: nothing on your PC depends on it.
+Any chat opens a 3D **room** you share live with whoever is inside — up to ten people. It grows with your group, every group gets its own colors, you can sit down, talk with **proximity voice**, and see the photos (GIFs included) and achievements of the people there. The room has a **TV**: play a game from it and everyone watches — and hears — you play while you all keep talking, or put a **YouTube** video or **Twitch** stream on and watch it together. And a **radio** that plays any song, streamed from whoever puts it on, without downloading anything to anyone's PC. The account is optional: nothing on your PC depends on it.
 
 ---
 
 ## Screenshots
+
+<p align="center">
+  <img src="media/0.4.9/tv-play.jpg" width="820" alt="The room TV"><br>
+  <em>The room TV: play from it, and everyone watches your game, live.</em>
+</p>
+
+<p align="center">
+  <img src="media/0.4.9/watch-together.jpg" width="820" alt="Watch together"><br>
+  <em>Watch together: YouTube and Twitch on the TV, in sync for everyone.</em>
+</p>
+
+<p align="center">
+  <img src="media/0.4.9/radio-any-song.jpg" width="820" alt="The radio"><br>
+  <em>A radio that plays any song, streamed from whoever puts it on.</em>
+</p>
 
 <p align="center">
   <img src="media/0.4.8/plaza-home.jpg" width="820" alt="Frutii Plaza"><br>
@@ -186,7 +201,7 @@ Frutii is being built offline-first: everything that lives on your machine has t
 
 **Next** — Vulkan rendering for the heavy 3D consoles.
 
-**The social layer** is here — a Frutii account, friends, presence, chat, profile cards, Frutii Plaza with notes, communities and reactions, and a 3D **group room** with proximity voice and a shared radio that you open from any chat. Where the room goes next: a TV to watch whoever is playing, and finally joining their game (delay-based netplay first, rollback later). The account is deliberately **additive**: losing it never costs you your library, saves, states, screenshots or RetroAchievements progress.
+**The social layer** is here — a Frutii account, friends, presence, chat, profile cards, Frutii Plaza with notes, communities and reactions, and a 3D **group room** you open from any chat, with proximity voice, a TV that shows your friends' games live or a YouTube/Twitch video everyone watches together, and a radio that plays any song. **Next (0.5.0): netplay** — joining a friend's game from the room (delay-based first, rollback later). The account is deliberately **additive**: losing it never costs you your library, saves, states, screenshots or RetroAchievements progress.
 
 ---
 
